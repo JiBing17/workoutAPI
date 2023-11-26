@@ -4,32 +4,33 @@ import { Box, Stack, Typography } from '@mui/material';
 import { exerciseOptions, fetchData } from '../utils/fetchData';
 import ExerciseCard from './ExerciseCard';
 
-// Exercises Component 
+// Exercises Component: Displays paginated exercise cards based on body part
 const Exercises = ({ exercises, setExercises, bodyPart }) => {
-  // current page number
+  // Current page number state
   const [currentPage, setCurrentPage] = useState(1);
 
-  // max exercises per page
+  // Maximum exercises per page state
   const [exercisesPerPage, setExercisesPerPage] = useState(9);
 
-  // Pagination
+  // Calculate indexes for pagination
   const indexOfLastExercise = currentPage * exercisesPerPage;
   const indexOfFirstExercise = indexOfLastExercise - exercisesPerPage;
 
-  // current 9 exercises
+  // Extract the exercises to display on the current page
   const currentExercises = exercises.slice(indexOfFirstExercise, indexOfLastExercise);
 
+  // Pagination event handler
   const paginate = (event, value) => {
     setCurrentPage(value);
-
-    window.scrollTo({ top: 1800, behavior: 'smooth' });
+    window.scrollTo({ top: 1800, behavior: 'smooth' }); // Scroll to top when pagination changes
   };
 
-  // runs once when mounted, then runs when bodypart var is changed (displays exercises with targeted bodypart)
+  // Fetch exercises based on body part selected (runs when bodyPart changes)
   useEffect(() => {
     const fetchExercisesData = async () => {
       let exercisesData = [];
 
+      // Fetch all exercises or exercises for a specific body part
       if (bodyPart === 'all') {
         exercisesData = await fetchData('https://exercisedb.p.rapidapi.com/exercises', exerciseOptions);
       } else {
@@ -43,24 +44,20 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
   }, [bodyPart]);
 
   return (
-    <Box id = "exercises"
-      sx = {{mt: {lg: "110px"}}}
-      mt = "50px"
-      p = "20px">
-        <Typography variant = "h3" mb = "46px">
-          Showing Results
-        </Typography>
-        <Stack direction= "row" sx = {{ gap: {lg: "110px", xs: "50px"}}}
-          flexWrap = "wrap" justifyContent= "center">
-            {/* Iterates through current exercises and creates Exercise Card Component for each */}
-          {currentExercises.map((exercise, index)=> {
-            return (
-              <ExerciseCard key = {index} exercise = {exercise}/>
-            )
-          })}
-        </Stack>
-        <Stack sx={{ mt: { lg: '114px', xs: '70px' } }} alignItems="center">
-          {/* if more than 9 exercises, render Pagination Component */}
+    <Box id="exercises" sx={{ mt: { lg: "110px" } }} mt="50px" p="20px">
+      {/* Title: "Showing Results" */}
+      <Typography variant="h3" mb="46px">
+        Showing Results
+      </Typography>
+      {/* Display exercise cards */}
+      <Stack direction="row" sx={{ gap: { lg: "110px", xs: "50px" } }} flexWrap="wrap" justifyContent="center">
+        {/* Iterate through current exercises and create Exercise Card Component for each */}
+        {currentExercises.map((exercise, index) => (
+          <ExerciseCard key={index} exercise={exercise} />
+        ))}
+      </Stack>
+      {/* Pagination: Display if more than 9 exercises */}
+      <Stack sx={{ mt: { lg: '114px', xs: '70px' } }} alignItems="center">
         {exercises.length > 9 && (
           <Pagination
             color="standard"
@@ -72,9 +69,9 @@ const Exercises = ({ exercises, setExercises, bodyPart }) => {
             size="large"
           />
         )}
-        </Stack>
+      </Stack>
     </Box>
-  )
+  );
 }
 
-export default Exercises
+export default Exercises;

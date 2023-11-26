@@ -6,32 +6,34 @@ import BodyPart from './BodyPart';
 import RightArrowIcon from '../assets/icons/right-arrow.png';
 import LeftArrowIcon from '../assets/icons/left-arrow.png';
 
-// scroll left function 
+// Function for scrolling left
 const LeftArrow = () => {
   const { scrollPrev } = useContext(VisibilityContext);
 
   return (
+    // Left arrow icon for scrolling left
     <Typography onClick={() => scrollPrev()} className="right-arrow">
       <img src={LeftArrowIcon} alt="right-arrow" />
     </Typography>
   );
 };
 
-// scroll right function
+// Function for scrolling right
 const RightArrow = () => {
   const { scrollNext } = useContext(VisibilityContext);
 
   return (
+    // Right arrow icon for scrolling right
     <Typography onClick={() => scrollNext()} className="left-arrow">
       <img src={RightArrowIcon} alt="right-arrow" />
     </Typography>
   );
 };
 
-// Horizontal Scrollbar Component
+// Horizontal Scrollbar Component: Displays a horizontal scrollbar for body parts or exercise cards
 const HorizontalScrollbar = ({ data, bodyParts, setBodyPart, bodyPart }) => (
   <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-    {/* Iterates through each bodyPart */}
+    {/* Iterate through each bodyPart or exercise */}
     {data.map((item) => (
       <Box
         key={item.id || item}
@@ -39,8 +41,8 @@ const HorizontalScrollbar = ({ data, bodyParts, setBodyPart, bodyPart }) => (
         title={item.id || item}
         m="0 40px"
       >
-        {/* If bodypart argument display BodyPart Component, else display Exercise Card Component */}
-        {bodyParts ? <BodyPart item={item} setBodyPart={setBodyPart} bodyPart={bodyPart} /> : <ExerciseCard exercise={item} /> }
+        {/* If bodyParts are true, display BodyPart Component; otherwise, display ExerciseCard Component */}
+        {bodyParts ? <BodyPart item={item} setBodyPart={setBodyPart} bodyPart={bodyPart} /> : <ExerciseCard exercise={item} />}
       </Box>
     ))}
   </ScrollMenu>
